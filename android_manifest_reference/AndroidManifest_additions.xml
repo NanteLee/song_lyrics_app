@@ -1,0 +1,26 @@
+<!--
+  Add these lines inside the <manifest> tag (as siblings of <application>)
+  in: android/app/src/main/AndroidManifest.xml
+
+  RECORD_AUDIO  -> required to capture microphone audio
+  INTERNET      -> required to call the AudD API
+-->
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+<!--
+  Example of where it goes:
+
+  <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+      <uses-permission android:name="android.permission.RECORD_AUDIO" />
+      <uses-permission android:name="android.permission.INTERNET" />
+      <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+      <application
+          android:label="노래 가사 인식"
+          ...>
+          ...
+      </application>
+  </manifest>
+-->
