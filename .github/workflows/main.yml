@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Java (required by Android/Gradle)
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -23,6 +23,34 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+
+      # This adds the missing android/ project folder (Gradle files,
+      # AndroidManifest.xml, etc.) that "flutter create" normally
+      # generates. It's safe to run even though pubspec.yaml/lib already
+      # exist — it only fills in the platform folder, it won't overwrite
+      # your source files.
+      - name: Generate Android platform files
+        run: flutter create --platforms=android .
+
+      # Add the microphone/internet permissions our app needs into the
+      # freshly generated AndroidManifest.xml.
+      - name: Add required Android permissions
+        run: |
+          python3 - <<'EOF'
+          import re
+          path = "android/app/src/main/AndroidManifest.xml"
+          with open(path) as f:
+              content = f.read()
+          perms = (
+              '    <uses-permission android:name="android.permission.RECORD_AUDIO" />\n'
+              '    <uses-permission android:name="android.permission.INTERNET" />\n'
+              '    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />\n'
+          )
+          if "RECORD_AUDIO" not in content:
+              content = re.sub(r"(<manifest[^>]*>)", r"\1\n" + perms, content, count=1)
+              with open(path, "w") as f:
+                  f.write(content)
+          EOF
 
       - name: Install Flutter dependencies
         run: flutter pub get
