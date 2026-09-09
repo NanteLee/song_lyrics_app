@@ -9,11 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  # --- Minimum external dependencies used by this app ---
-  http: ^1.2.0                 # calling the AudD REST API
-  record: ^5.1.2                # recording short audio clips from the mic
-  permission_handler: ^11.3.1   # requesting RECORD_AUDIO permission at runtime
+  http: ^1.2.0
+  record: ^5.1.2
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_test:
@@ -22,3 +20,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+dependency_overrides:
+  record_linux: ^2.1.0
